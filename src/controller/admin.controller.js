@@ -15,7 +15,7 @@ const signup = async (req, res) => {
 
 const UserList_get = async (req, res) => {
   try {
-    const userList = await Admin.find({});
+    const userList = await Admin.find({ deleted: { $ne: true } });
     res.status(200).send({ message: "List of user registered", userList });
   } catch (e) {
     res.status(400).send(e);
@@ -28,10 +28,9 @@ const login = async (req, res) => {
       req.body.email,
       req.body.password
     );
-    const { token, expirationDate } = await user.generateAuthToken();
-    const expiresIn = Math.floor(expirationDate.getTime() / 1000);
+    const { token, expiresInSeconds } = await user.generateAuthToken();
 
-    res.status(200).send({ user, token, expiresIn });
+    res.status(200).send({ user, token, expiresIn: expiresInSeconds });
   } catch (e) {
     res.status(400).send();
   }

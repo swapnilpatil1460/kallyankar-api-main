@@ -7,7 +7,6 @@ const addSoldBatteryDetails = async (req, res) => {
 
   try {
     await battery.save();
-    await deleteBattery.save();
     res.status(201).send({ message: "New battery record submitted!", battery });
   } catch (e) {
     res.status(400).send(e);

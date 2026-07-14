@@ -8,11 +8,11 @@ const {
   updateById,
 } = require("../controller/gst.controller");
 
-router.post("/add", registerNewGST);
+router.post("/add", auth, registerNewGST);
 
-router.delete("/delete/:id", deleteGSTItem);
+router.delete("/delete/:id", auth, deleteGSTItem);
 
-router.get("/", getGSTList);
+router.get("/", auth, getGSTList);
 
 router.patch("/update/:id", auth, updateById);
 

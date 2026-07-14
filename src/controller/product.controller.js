@@ -17,7 +17,7 @@ const addSoldBatteryDetails = async (req, res) => {
 const fetchSoldBatteries = async (req, res) => {
   try {
     const items = await Product.find(
-      {},
+      { deleted: { $ne: true } },
       {
         _id: 1,
         name: 1,
@@ -27,6 +27,7 @@ const fetchSoldBatteries = async (req, res) => {
         vehicle_number: 1,
         price: 1,
         customer: 1,
+        createdAt: 1,
       }
     ).populate({
       path: "customer",
@@ -40,7 +41,7 @@ const fetchSoldBatteries = async (req, res) => {
 
 const fetchSoldBatteriesToExport = async (req, res) => {
   try {
-    const soldList = await Product.find({});
+    const soldList = await Product.find({ deleted: { $ne: true } });
     res.status(200).send({ message: "List of sold batteries", soldList });
   } catch (e) {
     res.status(400).send(e);

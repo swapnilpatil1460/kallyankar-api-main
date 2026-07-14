@@ -8,9 +8,11 @@ const {
   billintByCustomerId,
   getBillingRecordsByStatus,
 } = require("../controller/billing.controller");
+const { createCheckout } = require("../controller/checkout.controller");
 
 const router = new express.Router();
 router.post("/add", auth, addBilling);
+router.post("/checkout", auth, createCheckout);
 router.get("/get-list", auth, getBillingRecords);
 router.get(
   "/get-list-by-status/:billing_status",

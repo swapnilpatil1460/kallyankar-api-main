@@ -9,7 +9,7 @@ const {
   updateById,
 } = require("../controller/amphere.size.controller");
 
-router.post("/", registerNewSize);
+router.post("/", auth, registerNewSize);
 
 router.delete("/delete/:id", auth, deleteSize);
 

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { getJwtSecret } = require("../config/env");
 
 const adminSchema = new mongoose.Schema(
   {
@@ -77,11 +78,11 @@ adminSchema.methods.toJSON = function () {
 };
 adminSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const expiresInHours = 10; // Expiration time in hours
+  const expiresInSeconds = 10 * 60 * 60;
 
   const expirationDate = new Date();
   expirationDate.setTime(
-    expirationDate.getTime() + expiresInHours * 60 * 60 * 1000
+    expirationDate.getTime() + expiresInSeconds * 1000
   );
 
   const token = jwt.sign(
@@ -89,16 +90,15 @@ adminSchema.methods.generateAuthToken = async function () {
       _id: user._id.toString(),
       exp: Math.floor(expirationDate.getTime() / 1000), // Add expiration time to payload
     },
-    process.env.JWT_SECRET
+    getJwtSecret()
   );
 
   user.tokens = user.tokens.concat({ token });
   await user.save();
 
-  return { token, expirationDate };
+  return { token, expiresInSeconds };
 };
 adminSchema.statics.findByEmailId = async (email) => {
-  console.log(email);
   const user = await Admin.findOne({ email });
 
   if (!user) {

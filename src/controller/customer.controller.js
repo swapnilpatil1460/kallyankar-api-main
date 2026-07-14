@@ -17,7 +17,7 @@ const registerCustomer_post = async (req, res) => {
 const customerList_get = async (req, res) => {
   try {
     let items = await Customer.find(
-      {},
+      { deleted: { $ne: true } },
       {
         _id: 1,
         name: 1,
@@ -38,7 +38,7 @@ const customerList_get = async (req, res) => {
 const customer_get = async (req, res) => {
   const customerId = req.params.id;
   try {
-    const customer = await Customer.findOne({ _id: customerId });
+    const customer = await Customer.findOne({ _id: customerId, deleted: { $ne: true } });
     if (customer) {
       res.status(200).send({ message: "customer for given Id", customer });
     } else res.status(404).send({ message: "customer not found with id" });

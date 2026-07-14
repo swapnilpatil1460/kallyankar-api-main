@@ -9,14 +9,14 @@ const {
   getStockItemRecords,
 } = require("../controller/stock_item.controller");
 
-router.post("/add", addStockItem);
+router.post("/add", auth, addStockItem);
 
-router.delete("/delete/:id", deleteStockItem);
+router.delete("/delete/:id", auth, deleteStockItem);
 
-router.get("/stock-items-by/:id", stockItemByStockId);
+router.get("/stock-items-by/:id", auth, stockItemByStockId);
 
 router.patch("/update/:id", auth, updateStockItemById);
 
-router.get("/stock-items", getStockItemRecords);
+router.get("/stock-items", auth, getStockItemRecords);
 
 module.exports = router;

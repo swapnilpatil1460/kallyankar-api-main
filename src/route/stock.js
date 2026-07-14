@@ -8,11 +8,11 @@ const {
   updateById,
 } = require("../controller/stock.controller");
 
-router.post("/add", registerNewStockElement);
+router.post("/add", auth, registerNewStockElement);
 
-router.delete("/delete/:id", deleteStockElement);
+router.delete("/delete/:id", auth, deleteStockElement);
 
-router.get("/list", getAllStockElements);
+router.get("/list", auth, getAllStockElements);
 
 router.patch("/update/:id", auth, updateById);
 

@@ -12,7 +12,7 @@ router.post("/add", auth, registerNewType);
 
 router.delete("/delete/:id", auth, deleteBatteryType);
 
-router.get("/", getAllBatteryTypes);
+router.get("/", auth, getAllBatteryTypes);
 
 router.patch("/update/:id", auth, updateById);
 

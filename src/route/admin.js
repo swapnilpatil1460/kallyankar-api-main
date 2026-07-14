@@ -10,7 +10,7 @@ const router = new express.Router();
 
 router.post("/login", login);
 
-router.post("/sign-up", signup);
+router.post("/sign-up", auth, signup);
 
 router.get("/user_list", auth, UserList_get);
 

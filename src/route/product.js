@@ -11,7 +11,7 @@ const {
 } = require("../controller/product/product.controller");
 
 router.post("/post", auth, addSoldBatteryDetails);
-router.get("", fetchSoldBatteries);
+router.get("", auth, fetchSoldBatteries);
 router.get("/list-to-export", auth, fetchSoldBatteriesToExport);
 router.get("/customer-specific-list/:id", auth, fetchSoldBatteryByCustomerId);
 router.delete("/delete/:productId", auth, deleteSoldBatteryById);

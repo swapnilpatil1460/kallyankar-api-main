@@ -14,12 +14,12 @@ const express = require("express");
 const router = new express.Router();
 
 router.post("/new-customer", auth, registerCustomer_post);
-router.get("", customerList_get);
+router.get("", auth, customerList_get);
 router.get("/seleted/:id", auth, customer_get);
 router.get("/billing-status/:status", auth, getCustomerListByBillingStatus);
 router.delete("/delete/:id", auth, customer_delete);
-router.patch("/update/:id", customer_update);
-router.patch("/update-billing/:id", customerUpdateBillingStatus);
-router.patch("/initial-billing/:id", initialBillingStatus);
+router.patch("/update/:id", auth, customer_update);
+router.patch("/update-billing/:id", auth, customerUpdateBillingStatus);
+router.patch("/initial-billing/:id", auth, initialBillingStatus);
 
 module.exports = router;

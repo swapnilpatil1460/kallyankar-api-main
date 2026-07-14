@@ -3,12 +3,18 @@ require("dotenv").config();
 
 require("./src/db/mongoose");
 const cors = require("cors");
+const { getCorsOrigins, getJwtSecret } = require("./src/config/env");
 const app = express();
-app.use(express.json());
+const allowedOrigins = getCorsOrigins();
+getJwtSecret();
+app.use(express.json({ limit: "1mb" }));
 
 app.use(
   cors({
-    origin: "*",
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Origin is not allowed by CORS."));
+    },
   })
 );
 const adminRouter = require("./src/route/admin");
@@ -32,4 +38,11 @@ app.use("/stock", stockRouter);
 app.use("/gst", gstRouter);
 app.use("/billing", billingRouter);
 app.use("/stock-item", stockItemRouter);
+app.use((error, req, res, next) => {
+  if (error.message === "Origin is not allowed by CORS.") {
+    return res.status(403).send({ error: error.message });
+  }
+  console.error(error);
+  return res.status(500).send({ error: "Internal server error." });
+});
 module.exports = app;

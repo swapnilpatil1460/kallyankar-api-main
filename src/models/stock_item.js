@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 const stockItemSchema = new mongoose.Schema(
   {
     quantity: {
-      type: String,
+      type: Number,
       required: true,
-      trim: true,
     },
     stock: {
       type: mongoose.Types.ObjectId,
