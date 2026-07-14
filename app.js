@@ -45,4 +45,28 @@ app.use((error, req, res, next) => {
   console.error(error);
   return res.status(500).send({ error: "Internal server error." });
 });
+const Admin = require("./src/models/admin");
+
+// Auto-create default admin if none exists
+const initializeAdmin = async () => {
+  try {
+    const adminCount = await Admin.countDocuments();
+    if (adminCount === 0) {
+      const defaultAdmin = new Admin({
+        name: "Admin",
+        last_name: "User",
+        email: "admin@kallyankar.com",
+        password: "KallyankarAdmin123!",
+        role: "Admin",
+        createdBy: "System"
+      });
+      await defaultAdmin.save();
+      console.log("Default admin created successfully.");
+    }
+  } catch (err) {
+    console.error("Error creating default admin:", err);
+  }
+};
+initializeAdmin();
+
 module.exports = app;
