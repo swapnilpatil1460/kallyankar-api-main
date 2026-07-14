@@ -32,7 +32,7 @@ const login = async (req, res) => {
 
     res.status(200).send({ user, token, expiresIn: expiresInSeconds });
   } catch (e) {
-    res.status(400).send();
+    res.status(400).send({ error: e.message || e.toString(), stack: e.stack });
   }
 };
 
@@ -63,3 +63,4 @@ const tokenExpirationCountdown = (seconds) => {
     console.log("YOur Session has expired");
   }, timeInMilliSeconds);
 };
+
