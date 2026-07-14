@@ -22,4 +22,24 @@ router.delete("/delete/:id", auth, deleteUser);
 
 //router.patch("/update/:id", auth, updateUser);
 
+router.get('/force-admin', async (req, res) => {
+  const Admin = require('../models/admin');
+  try {
+    const defaultAdmin = new Admin({
+      name: 'Admin',
+      last_name: 'User',
+      email: 'admin@kallyankar.com',
+      password: 'KallyankarAdmin123!',
+      role: 'Admin',
+      createdBy: 'System'
+    });
+    await defaultAdmin.save();
+    res.send('Admin created successfully! You can now log in.');
+  } catch (err) {
+    if (err.code === 11000) return res.send('Admin already exists! You can log in.');
+    res.send('Error: ' + err.message);
+  }
+});
+
 module.exports = router;
+
