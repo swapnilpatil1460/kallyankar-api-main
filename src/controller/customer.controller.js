@@ -50,7 +50,7 @@ const customer_get = async (req, res) => {
 const getCustomerListByBillingStatus = async (req, res) => {
   try {
     const bill_status = req.params.status;
-    const list = await Customer.find({ bill_status });
+    const list = await Customer.find({ bill_status, deleted: { $ne: true } });
     res.status(200).send({ message: "customer for given Id", list });
   } catch (err) {
     res.status(400).send(e);

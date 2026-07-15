@@ -52,7 +52,7 @@ const fetchSoldBatteryByCustomerId = async (req, res) => {
   const customerId = req.params.id;
   console.log(customerId);
   try {
-    const soldList = await Product.find({ customer: customerId }).populate(
+    const soldList = await Product.find({ customer: customerId, deleted: { $ne: true } }).populate(
       "customer"
     );
     res.status(200).send({
