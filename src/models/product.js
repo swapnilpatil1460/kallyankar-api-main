@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     vehicle_number: {
-      type: Number,
+      type: String,
       required: false,
       trim: true,
     },
