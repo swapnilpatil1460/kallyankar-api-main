@@ -49,9 +49,24 @@ const updateById = async (req, res) => {
     res.status(400).send(e);
   }
 };
+const checkAvailability = async (req, res) => {
+  try {
+    const { name, type } = req.body;
+    const stock = await Stock.findOne({ battery_name: name, amphere_size: type });
+    if (stock) {
+      return res.status(200).send({ stock });
+    }
+    return res.status(200).send({});
+  } catch (e) {
+    res.status(400).send(e);
+  }
+};
+
 module.exports = {
+  checkAvailability,
   registerNewStockElement,
   getAllStockElements,
   deleteStockElement,
   updateById
 };
+
