@@ -27,6 +27,7 @@ const stockRouter = require("./src/route/stock");
 const gstRouter = require("./src/route/gst");
 const billingRouter = require("./src/route/billing");
 const stockItemRouter = require("./src/route/stock_item");
+const invoiceRouter = require("./src/route/invoice");
 
 app.use("/admin", adminRouter);
 app.use("/inquiry", inquiryRouter);
@@ -38,6 +39,7 @@ app.use("/stock", stockRouter);
 app.use("/gst", gstRouter);
 app.use("/billing", billingRouter);
 app.use("/stock-item", stockItemRouter);
+app.use("/invoice", invoiceRouter);
 app.use((error, req, res, next) => {
   if (error.message === "Origin is not allowed by CORS.") {
     return res.status(403).send({ error: error.message });
@@ -70,3 +72,4 @@ const initializeAdmin = async () => {
 initializeAdmin();
 
 module.exports = app;
+
