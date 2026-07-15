@@ -78,7 +78,7 @@ adminSchema.methods.toJSON = function () {
 };
 adminSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const expiresInSeconds = 10 * 60 * 60;
+  const expiresInSeconds = 2 * 60 * 60; // 2 hours
 
   const expirationDate = new Date();
   expirationDate.setTime(
@@ -127,7 +127,7 @@ adminSchema.pre("save", async function (next) {
   const user = this;
 
   if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 8); //round or cost factor ->how much time is needed to calculate a single BCrypt hash, default value is 10
+    user.password = await bcrypt.hash(user.password, 12); //round or cost factor ->how much time is needed to calculate a single BCrypt hash, default value is 10
   }
 
   next();
