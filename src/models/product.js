@@ -31,6 +31,11 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    warranty_months: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
     customer: {
       type: mongoose.Types.ObjectId,
       ref: "Customer",
