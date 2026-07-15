@@ -9,44 +9,38 @@ const addPayment = async (req, res) => {
     return res.status(400).send({ message: "Missing required fields" });
   }
 
-  const session = await mongoose.startSession();
-
   try {
-    let paymentRecord;
-    let updatedBilling;
-
-    await session.withTransaction(async () => {
-      // 1. Create payment record
-      [paymentRecord] = await Payment.create(
-        [{ billing_id, customer_id, amount_paid, payment_method }],
-        { session }
-      );
-
-      // 2. Update billing's unpaid_amount
-      const billing = await Billing.findById(billing_id).session(session);
-      if (!billing) {
-        throw new Error("Billing record not found");
-      }
-
-      billing.unpaid_amount -= amount_paid;
-      if (billing.unpaid_amount <= 0) {
-        billing.unpaid_amount = 0;
-        billing.bill_status = "Paid";
-      }
-
-      await billing.save({ session });
-      updatedBilling = billing;
+    // 1. Create payment record
+    const paymentRecord = new Payment({
+      billing_id,
+      customer_id,
+      amount_paid,
+      payment_method
     });
+    await paymentRecord.save();
+
+    // 2. Update billing's unpaid_amount
+    const billing = await Billing.findById(billing_id);
+    if (!billing) {
+      return res.status(404).send({ message: "Billing record not found" });
+    }
+
+    billing.unpaid_amount -= amount_paid;
+    if (billing.unpaid_amount <= 0) {
+      billing.unpaid_amount = 0;
+      billing.bill_status = "Paid";
+    }
+
+    await billing.save();
 
     res.status(201).send({
       message: "Payment successfully recorded",
       payment: paymentRecord,
-      billing: updatedBilling,
+      billing: billing,
     });
   } catch (e) {
+    console.error("Payment error:", e);
     res.status(400).send({ message: "Error recording payment", error: e.message });
-  } finally {
-    await session.endSession();
   }
 };
 
