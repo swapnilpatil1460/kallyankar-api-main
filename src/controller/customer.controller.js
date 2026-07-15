@@ -27,7 +27,7 @@ const customerList_get = async (req, res) => {
         contact: 1,
         gst_number: 1,
       }
-    );
+    ).lean();
 
     res.status(200).send(items);
   } catch (e) {
@@ -38,7 +38,7 @@ const customerList_get = async (req, res) => {
 const customer_get = async (req, res) => {
   const customerId = req.params.id;
   try {
-    const customer = await Customer.findOne({ _id: customerId, deleted: { $ne: true } });
+    const customer = await Customer.findOne({ _id: customerId, deleted: { $ne: true } }).lean();
     if (customer) {
       res.status(200).send({ message: "customer for given Id", customer });
     } else res.status(404).send({ message: "customer not found with id" });
@@ -50,7 +50,7 @@ const customer_get = async (req, res) => {
 const getCustomerListByBillingStatus = async (req, res) => {
   try {
     const bill_status = req.params.status;
-    const list = await Customer.find({ bill_status, deleted: { $ne: true } });
+    const list = await Customer.find({ bill_status, deleted: { $ne: true } }).lean();
     res.status(200).send({ message: "customer for given Id", list });
   } catch (err) {
     res.status(400).send(e);

@@ -30,7 +30,7 @@ const fetchSoldBatteries = async (req, res) => {
     ).populate({
       path: "customer",
       select: "_id name last_name address email contact gst_number",
-    });
+    }).lean();
     res.status(200).send(items);
   } catch (e) {
     res.status(400).send(e.message);
@@ -39,7 +39,7 @@ const fetchSoldBatteries = async (req, res) => {
 
 const fetchSoldBatteriesToExport = async (req, res) => {
   try {
-    const soldList = await Product.find({});
+    const soldList = await Product.find({}).lean();
     res.status(200).send({ message: "List of sold batteries", soldList });
   } catch (e) {
     res.status(400).send(e);
@@ -52,7 +52,7 @@ const fetchSoldBatteryByCustomerId = async (req, res) => {
   try {
     const soldList = await Product.find({ customer: customerId }).populate(
       "customer"
-    );
+    ).lean();
     res.status(200).send({
       message: "List of sold batteries to  specific customer",
       soldList,

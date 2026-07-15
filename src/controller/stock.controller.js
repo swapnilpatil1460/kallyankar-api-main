@@ -27,7 +27,7 @@ const deleteStockElement = async (req, res) => {
 const getAllStockElements = async (req, res) => {
   try {
     console.log("inside the get list");
-    const list = await Stock.find({});
+    const list = await Stock.find({}).lean();
     res.status(200).send({ message: "Your stock elements  List!", list });
   } catch (e) {
     res.status(404).send({ message: "No record" });

@@ -16,7 +16,7 @@ const addBilling = async (req, res) => {
 
 const getBillingRecords = async (req, res) => {
   try {
-    const billingList = await Billing.find({});
+    const billingList = await Billing.find({}).lean();
     res.status(200).send({ message: "Your size  List!", billingList });
   } catch (e) {
     res.status(404).send({ message: "No record" });
@@ -29,7 +29,7 @@ const getBillingRecordsByStatus = async (req, res) => {
 
     const billingList = await Billing.find({
       bill_status: billing_status,
-    }).populate("customer");
+    }).populate("customer").lean();
 
     res.status(200).send({ message: "Your size  List!", billingList });
   } catch (e) {
@@ -73,7 +73,7 @@ const billintByCustomerId = async (req, res) => {
   try {
     const billingList = await Billing.find({ customer: customerId }).populate(
       "customer"
-    );
+    ).lean();
     res.status(200).send({
       message: "List of sold batteries to  specific customer",
       billingList,
