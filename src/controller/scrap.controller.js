@@ -9,6 +9,16 @@ const getScrapList = async (req, res) => {
   }
 };
 
+const addScrap = async (req, res) => {
+  try {
+    const scrap = new Scrap(req.body);
+    await scrap.save();
+    res.status(201).send({ message: "Scrap item added successfully", scrap });
+  } catch (e) {
+    res.status(400).send({ message: "Error adding scrap item", error: e.message });
+  }
+};
+
 const deleteScrap = async (req, res) => {
   const id = req.params.id;
   try {
@@ -28,5 +38,6 @@ const deleteScrap = async (req, res) => {
 
 module.exports = {
   getScrapList,
+  addScrap,
   deleteScrap
 };
