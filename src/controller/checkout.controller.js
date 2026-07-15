@@ -3,6 +3,8 @@ const Billing = require("../models/billing");
 const Customer = require("../models/customer");
 const Product = require("../models/product");
 
+const Stock = require("../models/stock");
+
 const createCheckout = async (req, res) => {
   const { products, billing } = req.body;
   const customerId = billing?.customerId ?? billing?.customer;
@@ -36,6 +38,20 @@ const createCheckout = async (req, res) => {
         [{ ...billingDetails, customer: customerId }],
         { session }
       );
+
+      // Auto-decrease stock for each sold product
+      for (const product of products) {
+        const quantitySold = product.quantity || 1;
+        const stockRecord = await Stock.findOne({
+          battery_name: product.name,
+          amphere_size: product.type,
+        }).session(session);
+
+        if (stockRecord && stockRecord.available >= quantitySold) {
+          stockRecord.available -= quantitySold;
+          await stockRecord.save({ session });
+        }
+      }
     });
 
     return res.status(201).send({
