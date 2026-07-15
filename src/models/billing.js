@@ -17,6 +17,10 @@ const billingSchema = new mongoose.Schema(
       type: Number,
       require: true,
     },
+    exchange_discount: {
+      type: Number,
+      default: 0,
+    },
     customer: {
       type: mongoose.Types.ObjectId,
       ref: "Customer",

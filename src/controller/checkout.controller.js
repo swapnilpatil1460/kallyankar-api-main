@@ -4,9 +4,10 @@ const Customer = require("../models/customer");
 const Product = require("../models/product");
 
 const Stock = require("../models/stock");
+const Scrap = require("../models/scrap");
 
 const createCheckout = async (req, res) => {
-  const { products, billing } = req.body;
+  const { products, billing, exchanged_batteries } = req.body;
   const customerId = billing?.customerId ?? billing?.customer;
 
   if (!Array.isArray(products) || products.length === 0 || !billing) {
@@ -51,6 +52,15 @@ const createCheckout = async (req, res) => {
           stockRecord.available -= quantitySold;
           await stockRecord.save({ session });
         }
+      }
+
+      // Add exchanged batteries to scrap inventory
+      if (Array.isArray(exchanged_batteries) && exchanged_batteries.length > 0) {
+        const scrapDocuments = exchanged_batteries.map((scrap) => ({
+          ...scrap,
+          customer: customerId,
+        }));
+        await Scrap.insertMany(scrapDocuments, { session });
       }
     });
 
